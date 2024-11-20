@@ -1,4 +1,5 @@
 import requests
+import json
 
 
 class MUSINSA:
@@ -18,7 +19,6 @@ class MUSINSA:
         req = requests.get(
             "https://goods-detail.musinsa.com/api2/goods/" + product_code +"/curation", headers=self.headers
         )
-        print(req.text)
         name = req.json()["data"]["curationTabs"][0]["curationGoodsList"][0]["goodsName"]
         price = req.json()["data"]["curationTabs"][0]["curationGoodsList"][0]["price"]
         img = req.json()["data"]["curationTabs"][0]["curationGoodsList"][0]["imageUrl"]
@@ -31,9 +31,9 @@ class MUSINSA:
         }
         data_list = requests.get("https://goods.musinsa.com/api2/review/v1/view/filter?goodsNo="+product_code, headers=self.headers).json()["data"]["filterOption"]["firstOptions"]
         for i in data_list:
-            output["Stock"].update({i["txt"]: i["qty"]})
+            output["Stock"].update({i["val"]: i["qty"]})
         return output
 
 
-url = 'https://www.musinsa.com/products/4289228'
-print(MUSINSA().run(url))
+url = 'https://www.musinsa.com/products/4289227'
+print(json.dumps(MUSINSA().run(url), ensure_ascii=False, indent=4))
